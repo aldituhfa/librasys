@@ -13,9 +13,25 @@ return new class extends Migration
     {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('category_id')
+                ->constrained()
+                ->onDelete('cascade');
+
             $table->string('title');
             $table->string('author');
-            $table->integer('stock');
+
+            $table->string('publisher')->nullable();
+            $table->year('year')->nullable();
+
+            $table->string('isbn')->nullable();
+            $table->integer('pages')->nullable();
+
+            $table->integer('stock')->default(0);
+
+            $table->string('cover')->nullable(); // gambar buku
+            $table->text('description')->nullable(); // sinopsis buku
+
             $table->timestamps();
         });
     }

@@ -16,9 +16,7 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next, $role)
     {
         if ($request->user()->role !== $role) {
-            return response()->json([
-                'message' => 'Akses ditolak'
-            ], 403);
+            return redirect()->route('login');
         }
 
         return $next($request);
