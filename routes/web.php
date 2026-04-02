@@ -73,8 +73,8 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware('role:user')->group(function () {
 
         // dashboard user
-        Route::get('/user/dashboard', [DashboardUserController::class, 'index'])
-            ->name('user.DashboardUser');
+        // Route::get('/user/dashboard', [DashboardUserController::class, 'index'])
+        //     ->name('user.DashboardUser');
 
         // daftar buku 
         Route::get('/user/books', [UserBookController::class, 'index'])

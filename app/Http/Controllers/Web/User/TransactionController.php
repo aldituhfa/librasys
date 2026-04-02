@@ -39,7 +39,7 @@ class TransactionController extends Controller
             'status' => 'pending'
         ]);
 
-        return redirect()->back()->with('success', 'Permintaan peminjaman dikirim');
+        return redirect()->back()->with('success', 'Permintaan peminjaman dikirim. silahkan pergi ke menu riwayat');
     }
 
     public function history()

@@ -25,7 +25,7 @@ class AuthController extends Controller
                 return redirect()->route('admin.DashboardAdmin');
             }
 
-            return redirect()->route('user.DashboardUser');
+            return redirect()->route('user.books');
         }
 
         return back()->with('error', 'Email atau password salah');

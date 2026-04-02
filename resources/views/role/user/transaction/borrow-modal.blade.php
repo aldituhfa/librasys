@@ -1,5 +1,3 @@
-@foreach($books as $book)
-
 <div class="modal fade" id="borrowModal{{ $book->id }}" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -16,31 +14,27 @@
 
                     <div class="mb-3">
                         <label>Judul Buku</label>
-                        <input type="text"
-                            class="form-control"
-                            value="{{ $book->title }}"
-                            readonly>
+                        <input type="text" class="form-control" value="{{ $book->title }}" readonly>
                     </div>
 
                     <div class="mb-3">
                         <label>Tanggal Pinjam</label>
-                        <input type="date"
-                            class="form-control"
-                            value="{{ date('Y-m-d') }}"
-                            readonly>
+                        <input type="date" class="form-control" value="{{ date('Y-m-d') }}" readonly>
                     </div>
 
                     <div class="mb-3">
                         <label>Jumlah Buku</label>
                         <input type="number"
                             name="quantity"
-                            class="form-control"
+                            class="form-control quantity-input"
                             min="1"
                             max="3"
+                            data-stock="{{ $book->stock }}"
                             required>
-                        <small class="text-danger">
-                            Maksimal pinjam 3 buku
+                        <small class="text-muted">
+                            Stok tersedia: {{ $book->stock }} &
                         </small>
+                        <small class="text-danger">Maksimal pinjam 3 buku</small>
                     </div>
 
                     <div class="mb-3">
@@ -52,9 +46,7 @@
                             min="{{ date('Y-m-d') }}"
                             max="{{ date('Y-m-d', strtotime('+7 days')) }}"
                             required>
-                        <small class="text-danger">
-                            Maksimal peminjaman 7 hari
-                        </small>
+                        <small class="text-danger">Maksimal peminjaman 7 hari</small>
                     </div>
 
                 </div>
@@ -72,6 +64,7 @@
 </div>
 
 <script>
+    // ALERT MAX PINJAMAN
     document.querySelectorAll('.return-date').forEach(function(input) {
 
         input.addEventListener('change', function() {
@@ -84,13 +77,30 @@
 
             if (diffDays > 7) {
                 alert("Maksimal peminjaman hanya 7 hari");
-
                 this.value = "";
             }
 
         });
 
     });
-</script>
 
-@endforeach
+
+
+    //ALERRT MAX JUMLAH BUKU YANG DI PINJAM
+    document.querySelectorAll('.quantity-input').forEach(function(input) {
+
+        input.addEventListener('input', function() {
+
+            let stock = parseInt(this.dataset.stock);
+            let value = parseInt(this.value);
+
+            if (value > stock) {
+                alert("Jumlah melebihi stok tersedia (" + stock + ")");
+
+                this.value = stock; // auto balikin ke max stok
+            }
+
+        });
+
+    });
+</script>
