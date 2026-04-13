@@ -16,21 +16,14 @@
         <form action="{{ route('admin.users.store') }}" method="POST" class="mb-4">
             @csrf
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <input type="text" name="name" class="form-control" placeholder="Nama" required>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <input type="email" name="email" class="form-control" placeholder="Email" required>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <input type="password" name="password" class="form-control" placeholder="Password" required>
-                </div>
-                <div class="col-md-2">
-                    <select name="role" class="form-control" required>
-                        <option value="">Role</option>
-                        <option value="admin">Admin</option>
-                        <option value="user">User</option>
-                    </select>
                 </div>
                 <div class="col-md-2">
                     <button class="btn btn-primary">Tambah</button>
@@ -44,7 +37,6 @@
                     <th>No</th>
                     <th>Nama</th>
                     <th>Email</th>
-                    <th>Role</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -54,13 +46,6 @@
                     <td>{{ $key+1 }}</td>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
-                    <td>
-                        @if($user->role == 'admin')
-                        <span class="badge bg-blue">Admin</span>
-                        @else
-                        <span class="badge bg-green">User</span>
-                        @endif
-                    </td>
                     <td>
                         <form action="{{ route('admin.users.destroy',$user->id) }}" method="POST">
                             @csrf
