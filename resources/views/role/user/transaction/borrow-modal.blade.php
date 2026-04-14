@@ -23,22 +23,12 @@
                     </div>
 
                     <div class="mb-3">
-                        <label>Jumlah Buku</label>
-                        <input type="number"
-                            name="quantity"
-                            class="form-control quantity-input"
-                            min="1"
-                            max="3"
-                            data-stock="{{ $book->stock }}"
-                            required>
-                        <small class="text-muted">
-                            Stok tersedia: {{ $book->stock }} &
-                        </small>
-                        <small class="text-danger">Maksimal pinjam 3 buku</small>
+                        <label>Jumlah Buku Yang Dipinjam</label>
+                        <input type="text" class="form-control" value="1 Buku" readonly>
                     </div>
 
                     <div class="mb-3">
-                        <label>Tanggal Kembali</label>
+                        <label>Pilih Tanggal Pengembalian Buku</label>
                         <input type="date"
                             name="return_date"
                             class="form-control return-date"
@@ -63,44 +53,24 @@
     </div>
 </div>
 
-<script>
-    // ALERT MAX PINJAMAN
-    document.querySelectorAll('.return-date').forEach(function(input) {
+     <!-- alert max peminjaman -->
+    <script>
+        document.querySelectorAll('.return-date').forEach(function(input) {
 
-        input.addEventListener('change', function() {
+            input.addEventListener('change', function() {
 
-            let borrowDate = new Date(this.dataset.borrow);
-            let returnDate = new Date(this.value);
+                let borrowDate = new Date(this.dataset.borrow);
+                let returnDate = new Date(this.value);
 
-            let diffTime = returnDate - borrowDate;
-            let diffDays = diffTime / (1000 * 60 * 60 * 24);
+                let diffTime = returnDate - borrowDate;
+                let diffDays = diffTime / (1000 * 60 * 60 * 24);
 
-            if (diffDays > 7) {
-                alert("Maksimal peminjaman hanya 7 hari");
-                this.value = "";
-            }
+                if (diffDays > 7) {
+                    alert("Maksimal peminjaman hanya 7 hari");
+                    this.value = "";
+                }
 
-        });
-
-    });
-
-
-
-    //ALERRT MAX JUMLAH BUKU YANG DI PINJAM
-    document.querySelectorAll('.quantity-input').forEach(function(input) {
-
-        input.addEventListener('input', function() {
-
-            let stock = parseInt(this.dataset.stock);
-            let value = parseInt(this.value);
-
-            if (value > stock) {
-                alert("Jumlah melebihi stok tersedia (" + stock + ")");
-
-                this.value = stock; // auto balikin ke max stok
-            }
+            });
 
         });
-
-    });
-</script>
+    </script>

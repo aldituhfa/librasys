@@ -11,23 +11,24 @@ class TransactionController extends Controller
     public function store(Request $request, $book_id)
     {
         $request->validate([
-            'quantity' => 'required|integer|min:1|max:3',
             'return_date' => 'required|date'
         ]);
 
         $borrowDate = now();
         $returnDate = $request->return_date;
 
+        // batas 7 hari
         if (\Carbon\Carbon::parse($returnDate)->diffInDays($borrowDate) > 7) {
             return redirect()->back()->with('error', 'Maksimal peminjaman 7 hari');
         }
 
+        // CEK: apakah masih punya pinjaman aktif
         $activeBorrow = Transaction::where('user_id', auth()->id())
             ->whereIn('status', ['pending', 'approved'])
-            ->sum('quantity');
+            ->exists();
 
-        if ($activeBorrow + $request->quantity > 3) {
-            return redirect()->back()->with('error', 'Total peminjaman maksimal 3 buku, anda harus mengembalikan buku terlebih dahulu');
+        if ($activeBorrow) {
+            return redirect()->back()->with('error', 'Kembalikan buku terlebih dahulu sebelum meminjam lagi');
         }
 
         Transaction::create([
@@ -35,11 +36,11 @@ class TransactionController extends Controller
             'book_id' => $book_id,
             'borrow_date' => $borrowDate,
             'return_date' => $returnDate,
-            'quantity' => $request->quantity,
+            'quantity' => 1,
             'status' => 'pending'
         ]);
 
-        return redirect()->back()->with('success', 'Permintaan peminjaman dikirim. silahkan pergi ke menu riwayat');
+        return redirect()->back()->with('success', 'Permintaan peminjaman dikirim');
     }
 
     public function history()

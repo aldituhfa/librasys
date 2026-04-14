@@ -255,6 +255,13 @@
 
     <!-- Book Grid -->
     <div class="book-grid">
+        
+        @php
+        $activeBorrow = \App\Models\Transaction::where('user_id', auth()->id())
+        ->whereIn('status', ['pending','approved'])
+        ->exists();
+        @endphp
+
         @forelse($books as $book)
         <a href="{{ route('user.books.show', $book->id) }}" class="book-card">
             @if($book->cover)

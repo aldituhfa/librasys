@@ -47,7 +47,15 @@
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
                     <td>
-                        <form action="{{ route('admin.users.destroy',$user->id) }}" method="POST">
+                        <!-- EDIT -->
+                        <button class="btn btn-warning btn-sm"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editUser{{ $user->id }}">
+                            Edit
+                        </button>
+
+                        <!-- DELETE -->
+                        <form action="{{ route('admin.users.destroy',$user->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button class="btn btn-danger btn-sm"
@@ -61,6 +69,8 @@
             </tbody>
         </table>
 
+        @include('role.admin.user.edit-modal')
+        
     </div>
 </div>
 
