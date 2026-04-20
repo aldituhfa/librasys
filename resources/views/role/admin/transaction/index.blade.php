@@ -2,83 +2,195 @@
 
 @section('content')
 
-<h2>Data Peminjaman</h2>
+<div class="container-fluid px-4 py-4">
 
-@if(session('success'))
-<div class="alert alert-success">{{ session('success') }}</div>
-@endif
+    {{-- HEADER --}}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="fw-semibold mb-1">Manage Book Transactions</h4>
+            <p class="text-muted small mb-0">Manage library book borrowing data</p>
+        </div>
+        <div class="text-muted small">
+            <i class="ti ti-calendar me-1"></i> {{ now()->format('d F Y') }}
+        </div>
+    </div>
 
-@if(session('error'))
-<div class="alert alert-danger">{{ session('error') }}</div>
-@endif
+    {{-- ALERT --}}
+    @if(session('success'))
+    <div class="alert border-0 rounded-3 mb-4 py-2 px-3" style="background:#e8f5e9;">
+        {{ session('success') }}
+    </div>
+    @endif
 
-<table id="transactionTable" class="table table-bordered">
-    <thead>
-        <tr>
-            <th>No</th>
-            <th>User</th>
-            <th>Buku</th>
-            <th>Jumlah</th>
-            <th>Tanggal Pinjam</th>
-            <th>Tanggal Pengembalian</th>
-            <th>Status</th>
-            <th>Aksi</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach($transactions as $key => $trx)
-        <tr>
-            <td>{{ $key+1 }}</td>
-            <td>{{ $trx->user->name }}</td>
-            <td>{{ $trx->book->title }}</td>
-            <td>{{ $trx->quantity }}</td>
-            <td>{{ $trx->borrow_date }}</td>
-            <td>{{ $trx->return_date }}</td>
-            <td>
+    @if(session('error'))
+    <div class="alert border-0 rounded-3 mb-4 py-2 px-3" style="background:#ffebee;">
+        {{ session('error') }}
+    </div>
+    @endif
 
-                @if($trx->status == 'pending')
-                <span class="badge bg-yellow">Pending</span>
+    {{-- CONTAINER BELAKANG (LAYER 1) --}}
+    <div class="p-3 rounded-4" style="background:#f8fafc;">
 
-                @elseif($trx->status == 'approved' && now()->gt($trx->return_date))
-                <span class="badge bg-red">Terlambat</span>
+        {{-- CARD UTAMA (LAYER 2) --}}
+        <div class="card border-0 rounded-4" style="box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+            <div class="card-body p-4">
 
-                @elseif($trx->status == 'approved')
-                <span class="badge bg-green">Approved</span>
+                {{-- HEADER TABLE --}}
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <h6 class="fw-semibold mb-0">Transaction List</h6>
+                    <span class="badge rounded-pill px-3 py-2" style="background:#eef2ff; color:#4338ca;">
+                        {{ count($transactions) }} Transactions
+                    </span>
+                </div>
 
-                @elseif($trx->status == 'late')
-                <span class="badge bg-red">Terlambat</span>
+                {{-- TABLE --}}
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0 datatable">
 
-                @elseif($trx->status == 'rejected')
-                <span class="badge bg-red">Rejected</span>
+                        <thead>
+                            <tr style="border-bottom:1px solid #e5e7eb;">
+                                <th class="text-muted small">No</th>
+                                <th class="text-muted small">Username</th>
+                                <th class="text-muted small">Book</th>
+                                <th class="text-muted small">Borrow Date</th>
+                                <th class="text-muted small">Status</th>
+                                <th class="text-muted small">Fine</th>
+                                <th class="text-muted small">Payment</th>
+                                <th class="text-muted small text-end">Actions</th>
+                            </tr>
+                        </thead>
 
-                @elseif($trx->status == 'returned')
-                <span class="badge bg-blue">Returned</span>
+                        <tbody>
+                            @foreach($transactions as $key => $trx)
+                            <tr style="border-bottom:1px solid #f1f5f9;">
 
-                @endif
+                                <td class="small text-muted">{{ $key+1 }}</td>
 
-            </td>
-            <td>
-                @if($trx->status == 'pending')
-                <form action="{{ route('admin.transactions.approve',$trx->id) }}" method="POST" style="display:inline">
-                    @csrf
-                    <button class="btn btn-success btn-sm">Approve</button>
-                </form>
+                                {{-- USER --}}
+                                <td>
+                                    <div class="fw-semibold">{{ $trx->user->name }}</div>
+                                    <small class="text-muted">{{ $trx->user->email }}</small>
+                                </td>
 
-                <form action="{{ route('admin.transactions.reject',$trx->id) }}" method="POST" style="display:inline">
-                    @csrf
-                    <button class="btn btn-danger btn-sm">Reject</button>
-                </form>
-                @endif
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
+                                {{-- BUKU --}}
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <img src="{{ asset('storage/' . $trx->book->cover) }}"
+                                            width="38" height="52"
+                                            style="object-fit:cover; border-radius:6px">
 
-<script>
-    $(document).ready(function() {
-        $('#transactionTable').DataTable();
-    });
-</script>
+                                        <div>
+                                            <div class="fw-semibold">
+                                                {{ Str::limit($trx->book->title, 35) }}
+                                            </div>
+                                            <small class="text-muted">
+                                                {{ $trx->borrow_date }} → {{ $trx->return_date }}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                {{-- TANGGAL --}}
+                                <td class="small">
+                                    {{ \Carbon\Carbon::parse($trx->borrow_date)->format('d M Y') }}
+                                </td>
+
+                                {{-- STATUS --}}
+                                <td>
+                                    @php
+                                    $isLate = now()->gt($trx->return_date) && $trx->status == 'approved';
+                                    @endphp
+
+                                    @if($trx->status == 'pending')
+                                    <span class="badge rounded-pill px-3 py-1" style="background:#fef3c7; color:#d97706;">Pending</span>
+
+                                    @elseif($trx->status == 'approved' && !$isLate)
+                                    <span class="badge rounded-pill px-3 py-1" style="background:#dcfce7; color:#16a34a;">Borrowed</span>
+
+                                    @elseif($isLate)
+                                    <span class="badge rounded-pill px-3 py-1" style="background:#fee2e2; color:#dc2626;">Late</span>
+
+                                    @elseif($trx->status == 'returned')
+                                    <span class="badge rounded-pill px-3 py-1" style="background:#dbeafe; color:#2563eb;">Finished</span>
+
+                                    @elseif($trx->status == 'done')
+                                    <span class="badge rounded-pill px-3 py-1" style="background:#dcfce7; color:#16a34a;">Done</span>
+
+                                    @elseif($trx->status == 'rejected')
+                                    <span class="badge rounded-pill px-3 py-1" style="background:#fee2e2; color:#dc2626;">Rejected</span>
+                                    @endif
+                                </td>
+
+                                {{-- DENDA --}}
+                                <td>
+                                    @if($trx->fine > 0)
+                                    <span class="fw-semibold" style="color:#dc2626;">
+                                        Rp {{ number_format($trx->fine,0,',','.') }}
+                                    </span>
+                                    @else
+                                    <span class="text-muted small">—</span>
+                                    @endif
+                                </td>
+
+                                {{-- BAYAR --}}
+                                <td>
+                                    @if($trx->fine > 0)
+                                    @if($trx->is_paid)
+                                    <span class="badge rounded-pill px-2 py-1" style="background:#dcfce7; color:#16a34a;">Paid</span>
+                                    @else
+                                    <span class="badge rounded-pill px-2 py-1" style="background:#fef3c7; color:#d97706;">Unpaid</span>
+                                    @endif
+                                    @else
+                                    <span class="text-muted small">—</span>
+                                    @endif
+                                </td>
+
+                                {{-- AKSI --}}
+                                <td class="text-end">
+                                    <div class="d-flex justify-content-end gap-2 flex-wrap">
+
+                                        @if($trx->status == 'pending')
+                                        <form action="{{ route('admin.transactions.approve',$trx->id) }}" method="POST">
+                                            @csrf
+                                            <button class="btn btn-sm rounded-3"
+                                                style="background:#dcfce7; color:#16a34a;">
+                                                Approve
+                                            </button>
+                                        </form>
+
+                                        <form action="{{ route('admin.transactions.reject',$trx->id) }}" method="POST">
+                                            @csrf
+                                            <button class="btn btn-sm rounded-3"
+                                                style="background:#fee2e2; color:#dc2626;">
+                                                Reject
+                                            </button>
+                                        </form>
+                                        @endif
+
+                                        @if($trx->fine > 0 && !$trx->is_paid)
+                                        <form action="{{ route('admin.transactions.confirm',$trx->id) }}" method="POST">
+                                            @csrf
+                                            <button class="btn btn-sm rounded-3"
+                                                style="background:#dbeafe; color:#2563eb;">
+                                                Confirm Payment
+                                            </button>
+                                        </form>
+                                        @endif
+
+                                    </div>
+                                </td>
+
+                            </tr>
+                            @endforeach
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
 
 @endsection

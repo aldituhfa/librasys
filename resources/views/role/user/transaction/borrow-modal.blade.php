@@ -33,7 +33,7 @@
                             name="return_date"
                             class="form-control return-date"
                             data-borrow="{{ date('Y-m-d') }}"
-                            min="{{ date('Y-m-d') }}"
+                            min="{{ date('Y-m-d', strtotime('+1 day')) }}"
                             max="{{ date('Y-m-d', strtotime('+7 days')) }}"
                             required>
                         <small class="text-danger">Maksimal peminjaman 7 hari</small>
@@ -53,24 +53,29 @@
     </div>
 </div>
 
-     <!-- alert max peminjaman -->
-    <script>
-        document.querySelectorAll('.return-date').forEach(function(input) {
+<!-- alert max peminjaman -->
+<script>
+    document.querySelectorAll('.return-date').forEach(function(input) {
 
-            input.addEventListener('change', function() {
+        input.addEventListener('change', function() {
 
-                let borrowDate = new Date(this.dataset.borrow);
-                let returnDate = new Date(this.value);
+            let borrowDate = new Date(this.dataset.borrow);
+            let returnDate = new Date(this.value);
 
-                let diffTime = returnDate - borrowDate;
-                let diffDays = diffTime / (1000 * 60 * 60 * 24);
+            let diffTime = returnDate - borrowDate;
+            let diffDays = diffTime / (1000 * 60 * 60 * 24);
 
-                if (diffDays > 7) {
-                    alert("Maksimal peminjaman hanya 7 hari");
-                    this.value = "";
-                }
+            if (diffDays < 1) {
+                alert("Tanggal pengembalian tidak boleh sama dengan tanggal pinjam");
+                this.value = "";
+            }
 
-            });
+            if (diffDays > 7) {
+                alert("Maksimal peminjaman hanya 7 hari");
+                this.value = "";
+            }
 
         });
-    </script>
+
+    });
+</script>

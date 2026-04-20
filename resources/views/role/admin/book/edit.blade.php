@@ -91,6 +91,12 @@
 
                         </div>
 
+                        <div class="mb-2">
+                            <label>Harga Buku</label>
+                            <input type="number" name="price" class="form-control"
+                                value="{{ $book->price }}" required>
+                        </div>
+
                         <div class="col-md-4">
                             <label>Cover</label>
                             <input type="file" name="cover" class="form-control">

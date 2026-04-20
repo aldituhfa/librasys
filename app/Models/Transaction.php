@@ -12,7 +12,10 @@ class Transaction extends Model
         'borrow_date',
         'return_date',
         'quantity',
-        'status'
+        'status',
+        'fine',
+        'is_paid',
+        'condition' 
     ];
 
     public function user()

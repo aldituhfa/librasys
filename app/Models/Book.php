@@ -17,7 +17,8 @@ class Book extends Model
         'stock',
         'cover',
         'description',
-        'category_id'
+        'category_id',
+        'price'
     ];
 
     public function transactions()

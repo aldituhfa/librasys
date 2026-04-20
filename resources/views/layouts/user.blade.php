@@ -109,10 +109,38 @@
                         </li>
 
                         <li class="nav-item">
+                            <a href="{{ route('user.favorites') }}"
+                                class="nav-link {{ request()->routeIs('user.favorites') ? 'active' : '' }}">
+                                <i class="ti ti-heart"></i>
+                                Favorit
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a href="{{ route('user.transactions') }}"
-                                class="nav-link {{ request()->routeIs('user.transactions') ? 'active' : '' }}">
-                                <i class="ti ti-history"></i>
-                                Peminjaman Saya
+                                class="nav-link d-flex justify-content-between align-items-center {{ request()->routeIs('user.transactions') ? 'active' : '' }}">
+
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="ti ti-history"></i>
+                                    <span>Peminjaman Saya</span>
+                                </div>
+
+                                {{-- NOTIF --}}
+                                @if($approvedCount > 0)
+                                <span class="badge rounded-pill"
+                                    style="background:#22c55e; color:white; font-size:10px;">
+                                    {{ $approvedCount }}
+                                </span>
+                                @endif
+
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('user.report') }}"
+                                class="nav-link {{ request()->routeIs('user.report') ? 'active' : '' }}">
+                                <i class="ti ti-file-report"></i>
+                                Riwayat Peminjaman
                             </a>
                         </li>
 
@@ -121,17 +149,51 @@
                     <!-- RIGHT -->
                     <div class="d-flex align-items-center gap-3">
 
-                        <div>
-                            👤 {{ auth()->user()->name }}
-                            <span class="badge bg-green-lt">User</span>
-                        </div>
+                        <div class="dropdown">
 
-                        <form action="{{ route('logout') }}" method="POST">
-                            @csrf
-                            <button class="btn btn-danger btn-sm">
-                                Logout
+                            <button class="btn d-flex align-items-center gap-2 border-0"
+                                data-bs-toggle="dropdown"
+                                style="background: transparent;">
+
+                                {{-- NAME --}}
+                                <div class="text-start d-none d-md-block">
+                                    <div class="small fw-semibold">{{ auth()->user()->name }}</div>
+                                    <div class="text-muted small">User</div>
+                                </div>
+
+                                <i class="ti ti-chevron-down small text-muted"></i>
                             </button>
-                        </form>
+
+                            {{-- DROPDOWN --}}
+                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 p-2">
+
+                                <li>
+                                    <div class="dropdown-item-text">
+                                        <div class="fw-semibold">{{ auth()->user()->name }}</div>
+                                        <small class="text-muted">{{ auth()->user()->email }}</small>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+
+                                <li>
+                                    <form action="{{ route('logout') }}" method="POST">
+                                        @csrf
+                                        <button class="dropdown-item text-danger rounded-2">
+                                            <i class="ti ti-logout me-2"></i> Logout
+                                        </button>
+                                    </form>
+                                </li>
+
+                            </ul>
+
+                        </div>
 
                     </div>
 

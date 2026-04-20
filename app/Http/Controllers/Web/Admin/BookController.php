@@ -26,7 +26,11 @@ class BookController extends Controller
             'author' => 'required',
             'stock' => 'required|integer|min:0',
             'category_id' => 'required',
+            'price' => 'required|integer|min:0',
+            'isbn' => 'nullable|unique:books,isbn',
             'cover' => 'image|mimes:jpg,png,jpeg|max:2048'
+        ], [
+            'isbn.unique' => 'ISBN sudah digunakan, masukkan ISBN lain'
         ]);
 
         $data = $request->all();
@@ -63,7 +67,19 @@ class BookController extends Controller
     {
         $book = Book::findOrFail($id);
 
+        $request->validate([
+            'title' => 'required',
+            'author' => 'required',
+            'stock' => 'required|integer|min:0',
+            'category_id' => 'required',
+            'price' => 'required|integer|min:0',
+            'isbn' => 'nullable|unique:books,isbn,' . $id, // ✅ PENTING
+            'cover' => 'image|mimes:jpg,png,jpeg|max:2048'
+        ]);
+
         $data = $request->all();
+
+        $data['isbn'] = $request->isbn ?: null;
 
         if ($request->hasFile('cover')) {
             $cover = $request->file('cover')->store('books', 'public');

@@ -8,12 +8,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
     <style>
+        /* Warna background utama - biru sangat lembut (hint of blue) */
         body {
-            background: #f5f7fb;
+            background: #eef2f7;
+            /* biru keabu-abuan sangat soft */
         }
 
-        /* SIDEBAR */
-
+        /* SIDEBAR - PUTIH */
         .sidebar {
             width: 230px;
             height: 100vh;
@@ -22,40 +23,28 @@
             top: 0;
             transition: .25s;
             z-index: 1000;
-        }
-
-        /* DARK SIDEBAR */
-
-        .sidebar.dark {
-            background: #061726;
-            /* lebih gelap */
-        }
-
-        /* LIGHT SIDEBAR */
-
-        .sidebar.light {
             background: #ffffff;
+            /* putih */
             border-right: 1px solid #e5e7eb;
+            /* border halus */
         }
 
-        /* COLLAPSE */
-
+        /* COLLAPSE SIDEBAR */
         .sidebar.collapsed {
             width: 80px;
         }
 
         /* LOGO */
-
         .logo {
             padding: 22px;
             font-size: 20px;
             font-weight: 700;
             text-align: center;
-            color: white;
+            color: #1f2937;
+            /* gelap untuk kontras di putih */
         }
 
         /* MENU */
-
         .sidebar ul {
             list-style: none;
             padding: 0;
@@ -77,53 +66,34 @@
             font-weight: 600;
             border-radius: 6px;
             transition: .2s;
+            color: #374151;
+            /* teks gelap */
         }
 
         /* ICON */
-
         .sidebar i {
             font-size: 20px;
         }
 
-        /* DARK MENU */
-
-        .sidebar.dark a {
-            color: #ffffff;
-        }
-
-        .sidebar.dark a:hover {
-            background: #173d60;
+        /* HOVER MENU */
+        .sidebar ul li a:hover {
+            background: #f3f4f6;
+            /* abu-abu sangat muda */
         }
 
         /* ACTIVE MENU */
-
-        .sidebar.dark .active {
-            background: #cecece;
-            color: #000;
+        .sidebar .active {
+            background: #e5e9f0;
+            /* abu kebiruan tipis */
+            color: #1e40af;
         }
 
-        /* LIGHT MODE */
-
-        .sidebar.light a {
-            color: #374151;
-        }
-
-        .sidebar.light a:hover {
-            background: #ffffff;
-        }
-
-        .sidebar.light .active {
-            background: #fafbfb;
-        }
-
-        /* HIDE TEXT */
-
+        /* HIDE TEXT KETIKA COLLAPSE */
         .sidebar.collapsed .menu-text {
             display: none;
         }
 
-        /* TOOLTIP */
-
+        /* TOOLTIP SAAT COLLAPSE */
         .sidebar.collapsed li:hover::after {
             content: attr(data-title);
             position: absolute;
@@ -136,10 +106,10 @@
             font-size: 12px;
             border-radius: 6px;
             white-space: nowrap;
+            z-index: 1100;
         }
 
         /* PAGE WRAPPER */
-
         .page-wrapper {
             margin-left: 230px;
             transition: .25s;
@@ -149,28 +119,43 @@
             margin-left: 80px;
         }
 
-        /* HEADER */
-
+        /* HEADER - PUTIH */
         .header {
             height: 60px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 20px;
-            background: white;
-            border-bottom: 1px solid #eee;
+            background: #ffffff;
+            /* putih */
+            border-bottom: 1px solid #e2e8f0;
+            /* border soft */
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
         }
 
-        /* BUTTON */
-
+        /* TOMBOL TOGGLE (BUKA TUTUP SIDEBAR) */
         .toggle-btn {
             cursor: pointer;
             font-size: 22px;
+            color: #334155;
+            transition: .2s;
         }
 
-        .mode-btn {
-            cursor: pointer;
-            font-size: 20px;
+        .toggle-btn:hover {
+            color: #0f172a;
+        }
+
+        /* KONTEN UTAMA - background biru sangat lembut sudah di body */
+        .p-4 {
+            background: transparent;
+            /* biar ikut body */
+        }
+
+        /* Card atau komponen lain tetap rapi */
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
     </style>
 
@@ -180,8 +165,8 @@
 
     <div class="page">
 
-        <!-- SIDEBAR -->
-        <aside id="sidebar" class="sidebar dark">
+        <!-- SIDEBAR (PUTIH) -->
+        <aside id="sidebar" class="sidebar">
 
             <div class="logo">
                 <span class="menu-text">LibraSys</span>
@@ -201,7 +186,7 @@
                     <a href="{{ route('admin.categories') }}"
                         class="{{ request()->routeIs('admin.categories') ? 'active' : '' }}">
                         <i class="ti ti-category"></i>
-                        <span class="menu-text">Kategori</span>
+                        <span class="menu-text">Category</span>
                     </a>
                 </li>
 
@@ -209,7 +194,7 @@
                     <a href="{{ route('admin.books') }}"
                         class="{{ request()->routeIs('admin.books') ? 'active' : '' }}">
                         <i class="ti ti-book"></i>
-                        <span class="menu-text">Buku</span>
+                        <span class="menu-text">Book</span>
                     </a>
                 </li>
 
@@ -223,12 +208,31 @@
 
                 <li data-title="Peminjaman">
                     <a href="{{ route('admin.transactions') }}"
-                        class="{{ request()->routeIs('admin.transactions') ? 'active' : '' }}">
-                        <i class="ti ti-clipboard-text"></i>
-                        <span class="menu-text">Peminjaman</span>
+                        class="d-flex justify-content-between align-items-center {{ request()->routeIs('admin.transactions') ? 'active' : '' }}">
+
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="ti ti-clipboard-text"></i>
+                            <span class="menu-text">Transaction</span>
+                        </div>
+
+                        {{-- NOTIF --}}
+                        @if($pendingCount > 0)
+                        <span class="badge rounded-pill"
+                            style="background:#ef4444; color:white; font-size:10px;">
+                            {{ $pendingCount }}
+                        </span>
+                        @endif
+
                     </a>
                 </li>
 
+                <li data-title="Report">
+                    <a href="{{ route('admin.report') }}"
+                        class="{{ request()->routeIs('admin.report') ? 'active' : '' }}">
+                        <i class="ti ti-file-report"></i>
+                        <span class="menu-text">Report</span>
+                    </a>
+                </li>
             </ul>
 
         </aside>
@@ -240,95 +244,137 @@
             <div class="header">
 
                 <div class="d-flex align-items-center gap-3">
-
+                    <!-- HANYA TOMBOL BUKA TUTUP SIDEBAR (tanpa mode toggle) -->
                     <i id="toggleSidebar" class="ti ti-menu-2 toggle-btn"></i>
-
-                    <i id="toggleMode" class="ti ti-moon mode-btn"></i>
-
                 </div>
 
-                <div class="d-flex align-items-center gap-3">
+                <div class="dropdown">
 
-                    <div>
-                        👤 {{ auth()->user()->name }}
-                        <span class="badge bg-blue-lt">Admin</span>
-                    </div>
+                    <button class="btn d-flex align-items-center gap-2 border-0"
+                        data-bs-toggle="dropdown"
+                        style="background: transparent;">
 
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button class="btn btn-danger btn-sm">
-                            Logout
-                        </button>
-                    </form>
+                        {{-- NAME --}}
+                        <div class="text-start d-none d-md-block">
+                            <div class="small fw-semibold">{{ auth()->user()->name }}</div>
+                            <div class="text-muted small">Admin</div>
+                        </div>
+
+                        <i class="ti ti-chevron-down small text-muted"></i>
+                    </button>
+
+                    {{-- DROPDOWN --}}
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 p-2">
+
+                        <li>
+                            <div class="dropdown-item-text">
+                                <div class="fw-semibold">{{ auth()->user()->name }}</div>
+                                <small class="text-muted">{{ auth()->user()->email }}</small>
+                            </div>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button class="dropdown-item text-danger rounded-2">
+                                    <i class="ti ti-logout me-2"></i> Logout
+                                </button>
+                            </form>
+                        </li>
+
+                    </ul>
 
                 </div>
-
             </div>
-
-
             <div class="p-4">
                 @yield('content')
             </div>
-
         </div>
     </div>
 
 
-    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <!-- JQUERY -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+    <!-- TABLER -->
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
 
+    <!-- DATATABLES (BOOTSTRAP 5 STYLE) -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
     <script>
+        // SIDEBAR
         const sidebar = document.getElementById("sidebar")
         const pageWrapper = document.getElementById("pageWrapper")
-
         const toggleSidebar = document.getElementById("toggleSidebar")
-        const toggleMode = document.getElementById("toggleMode")
-
-        /* TOGGLE SIDEBAR */
 
         toggleSidebar.onclick = function() {
-
             sidebar.classList.toggle("collapsed")
             pageWrapper.classList.toggle("collapsed")
-
         }
 
-        /* MODE SWITCH */
-
-        toggleMode.onclick = function() {
-
-            if (sidebar.classList.contains("dark")) {
-
-                sidebar.classList.remove("dark")
-                sidebar.classList.add("light")
-
-                toggleMode.classList.remove("ti-moon")
-                toggleMode.classList.add("ti-sun")
-
-            } else {
-
-                sidebar.classList.remove("light")
-                sidebar.classList.add("dark")
-
-                toggleMode.classList.remove("ti-sun")
-                toggleMode.classList.add("ti-moon")
-
-            }
-
-        }
-    </script>
-
-
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-
-    <script>
+        // GLOBAL DATATABLE
         $(document).ready(function() {
-            $('#categoryTable').DataTable();
-            $('#bookTable').DataTable();
-        })
+
+            $('.datatable').DataTable({
+                responsive: true,
+                autoWidth: false,
+                pageLength: 10,
+                lengthMenu: [5, 10, 25, 50],
+
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json',
+                    search: "_INPUT_",
+                    searchPlaceholder: "Cari data...",
+                    lengthMenu: "Tampilkan _MENU_",
+                    info: "Menampilkan _START_ - _END_ dari _TOTAL_",
+                    zeroRecords: "Data tidak ditemukan",
+                },
+
+                dom: "<'row mb-3'<'col-md-6'l><'col-md-6'f>>" +
+                    "<'row'<'col-12'tr>>" +
+                    "<'row mt-3'<'col-md-5'i><'col-md-7'p>>",
+
+                columnDefs: [{
+                    targets: -1,
+                    orderable: false
+                }]
+            });
+
+        });
     </script>
 
+    <!-- WAJIB -->
+    @stack('scripts')
+
+    <style>
+        .dataTables_filter input {
+            border-radius: 8px;
+            padding: 6px 12px;
+        }
+
+        .dataTables_length select {
+            border-radius: 8px;
+        }
+
+        .dataTables_paginate .pagination .page-link {
+            border-radius: 6px;
+            margin: 0 2px;
+        }
+    </style>
 </body>
 
 </html>

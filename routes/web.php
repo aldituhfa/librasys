@@ -10,6 +10,7 @@ use App\Http\Controllers\Web\Admin\UserController;
 use App\Http\Controllers\Web\User\BookController as UserBookController;
 use App\Http\Controllers\Web\User\TransactionController as UserTransaction;
 use App\Http\Controllers\Web\Admin\TransactionController as AdminTransaction;
+use App\Http\Controllers\Web\User\FavoriteController;
 
 
 
@@ -64,6 +65,17 @@ Route::middleware(['auth'])->group(function () {
             ->name('admin.transactions.approve');
         Route::post('/admin/transactions/{id}/reject', [AdminTransaction::class, 'reject'])
             ->name('admin.transactions.reject');
+        Route::post('/admin/transactions/{id}/confirm', [AdminTransaction::class, 'confirmPayment'])
+            ->name('admin.transactions.confirm');
+
+
+        // report peminjaman admin
+        Route::get('/admin/report', [AdminTransaction::class, 'report'])
+            ->name('admin.report');
+        Route::get('/admin/report/excel', [AdminTransaction::class, 'exportExcel'])
+            ->name('admin.report.excel');
+        Route::get('/admin/report/pdf', [AdminTransaction::class, 'exportPDF'])
+            ->name('admin.report.pdf');
     });
 
 
@@ -93,5 +105,19 @@ Route::middleware(['auth'])->group(function () {
         // return book 
         Route::post('/user/return/{id}', [UserTransaction::class, 'returnBook'])
             ->name('user.return');
+
+        // denda
+        Route::post('/user/calculate-fine/{id}', [UserTransaction::class, 'calculateFine'])
+            ->name('user.calculate.fine');
+
+        // report peminjaman user
+        Route::get('/user/report', [UserTransaction::class, 'report'])
+            ->name('user.report');
+
+        // favorite
+        Route::get('/user/favorites', [FavoriteController::class, 'index'])
+            ->name('user.favorites');
+        Route::post('/user/favorite/{book}', [FavoriteController::class, 'toggle'])
+            ->name('user.favorite.toggle');
     });
 });
