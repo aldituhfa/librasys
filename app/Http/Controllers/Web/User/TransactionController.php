@@ -53,7 +53,7 @@ class TransactionController extends Controller
             'status' => 'pending'
         ]);
 
-        return redirect()->back()->with('success', 'Permintaan peminjaman dikirim');
+        return redirect()->back()->with('success', 'Permintaan peminjaman dikirim, silahkan tunggu konfirmasi admin');
     }
 
     public function history()
@@ -88,11 +88,16 @@ class TransactionController extends Controller
         // =========================
         // HITUNG TERLAMBAT
         // =========================
-        $today = now()->toDateString();
-        $returnDate = \Carbon\Carbon::parse($transaction->return_date)->toDateString();
+        $today = \Carbon\Carbon::today();
+        $returnDate = \Carbon\Carbon::parse($transaction->return_date);
 
-        $lateDays = \Carbon\Carbon::parse($returnDate)->diffInDays($today, false);
-        $lateDays = max(0, $lateDays);
+        $lateDays = $today->diffInDays($returnDate);
+
+        if ($today->gte($returnDate)) {
+            $lateDays += 1;
+        } else {
+            $lateDays = 0;
+        }
 
         $fine += $lateDays * 1000;
 
@@ -148,11 +153,16 @@ class TransactionController extends Controller
         // =========================
         // HITUNG TERLAMBAT (FIX)
         // =========================
-        $today = now()->toDateString();
-        $returnDate = \Carbon\Carbon::parse($transaction->return_date)->toDateString();
+        $today = \Carbon\Carbon::today();
+        $returnDate = \Carbon\Carbon::parse($transaction->return_date);
 
-        $lateDays = \Carbon\Carbon::parse($returnDate)->diffInDays($today, false);
-        $lateDays = max(0, $lateDays); // biar ga minus
+        $lateDays = $today->diffInDays($returnDate);
+
+        if ($today->gte($returnDate)) {
+            $lateDays += 1; 
+        } else {
+            $lateDays = 0;
+        }
 
         $fine += $lateDays * 1000;
 
