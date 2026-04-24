@@ -157,6 +157,15 @@
             border-radius: 12px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
+
+        .menu-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: #94a3b8;
+            margin: 16px 12px 6px;
+            letter-spacing: 0.5px;
+        }
     </style>
 
 </head>
@@ -174,6 +183,7 @@
 
             <ul>
 
+                {{-- DASHBOARD --}}
                 <li data-title="Dashboard">
                     <a href="{{ route('admin.DashboardAdmin') }}"
                         class="{{ request()->routeIs('admin.DashboardAdmin') ? 'active' : '' }}">
@@ -181,6 +191,9 @@
                         <span class="menu-text">Dashboard</span>
                     </a>
                 </li>
+
+                {{-- MASTER DATA --}}
+                <li class="menu-title">Master Data</li>
 
                 <li data-title="Kategori">
                     <a href="{{ route('admin.categories') }}"
@@ -214,6 +227,9 @@
                     </a>
                 </li>
 
+                {{-- TRANSACTION --}}
+                <li class="menu-title">Transaction</li>
+
                 <li data-title="Peminjaman">
                     <a href="{{ route('admin.transactions') }}"
                         class="d-flex justify-content-between align-items-center {{ request()->routeIs('admin.transactions') ? 'active' : '' }}">
@@ -223,7 +239,6 @@
                             <span class="menu-text">Transaction</span>
                         </div>
 
-                        {{-- NOTIF --}}
                         @if($pendingCount > 0)
                         <span class="badge rounded-pill"
                             style="background:#ef4444; color:white; font-size:10px;">
@@ -241,6 +256,7 @@
                         <span class="menu-text">Report</span>
                     </a>
                 </li>
+
             </ul>
 
         </aside>

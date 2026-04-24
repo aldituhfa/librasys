@@ -190,28 +190,109 @@
         color: #666;
     }
 
-    /* Selamat Pagi Section - dinamis sesuai waktu */
-    .greeting-section {
-        margin-bottom: 40px;
-        padding: 2px 0;
+    /* SEARCH & FILTER SECTION - STYLING DIPERBAIKI */
+    .search-filter-section {
+        margin-bottom: 30px;
+        padding: 20px 0;
         border-bottom: 1px solid #f0f0f0;
     }
 
-    .greeting-card {
-        padding: 0;
+    /* Search Box */
+    .search-box {
+        margin-bottom: 25px;
+        position: relative;
     }
 
-    .greeting-time {
-        font-size: 28px;
-        font-weight: bold;
+    .search-box .search-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #000000;
+        font-size: 18px;
+        pointer-events: none;
+    }
+
+    .search-box input {
+        width: 100%;
+        padding: 14px 16px 14px 48px;
+        border: 1px solid #5a5a5a;
+        border-radius: 12px;
+        font-size: 14px;
+        background: white;
+        transition: all 0.3s;
+        font-family: inherit;
+    }
+
+    .search-box input:focus {
+        outline: none;
+        border-color: #1a1a2e;
+        box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.08);
+    }
+
+    .search-box input::placeholder {
+        color: #bbb;
+    }
+
+    /* Category Chips */
+    .category-chips {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+    }
+
+    .category-chip {
+        padding: 8px 20px;
+        border: 1px solid #e0e0e0;
+        border-radius: 30px;
+        font-size: 13px;
+        cursor: pointer;
+        background: white;
+        transition: all 0.25s;
+        font-weight: 500;
+        color: #555;
+    }
+
+    .category-chip:hover {
+        border-color: #1a1a2e;
         color: #1a1a2e;
-        margin: 0 0 8px 0;
+        background: #fafafa;
+        transform: translateY(-1px);
     }
 
-    .greeting-message {
-        font-size: 16px;
-        color: #666;
-        margin: 0;
+    .category-chip.active {
+        background: #1a1a2e;
+        color: white;
+        border-color: #1a1a2e;
+        box-shadow: 0 2px 8px rgba(26, 26, 46, 0.2);
+    }
+
+    /* Filter Tabs */
+    .filter-tabs {
+        display: flex;
+        gap: 24px;
+        margin-bottom: 5px;
+    }
+
+    .filter-tabs a {
+        text-decoration: none;
+        color: #999;
+        font-size: 14px;
+        padding-bottom: 8px;
+        cursor: pointer;
+        transition: all 0.25s;
+        font-weight: 500;
+    }
+
+    .filter-tabs a:hover {
+        color: #1a1a2e;
+    }
+
+    .filter-tabs a.active {
+        color: #1a1a2e;
+        font-weight: 600;
+        border-bottom: 2px solid #1a1a2e;
     }
 
     /* Rekomendasi Untuk Anda */
@@ -230,83 +311,13 @@
         font-size: 22px;
         font-weight: bold;
         margin: 0;
+        color: #1a1a2e;
     }
 
     .section-header a {
         color: #0066cc;
         text-decoration: none;
         font-size: 14px;
-    }
-
-    /* Search Box - lebih kotak */
-    .search-box {
-        margin-bottom: 25px;
-    }
-
-    .search-box input {
-        width: 100%;
-        padding: 12px 16px;
-        border: 1.5px solid #e0e0e0;
-        border-radius: 8px;
-        font-size: 14px;
-        background: white;
-        transition: all 0.3s;
-    }
-
-    .search-box input:focus {
-        outline: none;
-        border-color: #1a1a2e;
-        box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.1);
-    }
-
-    /* Category Chips */
-    .category-chips {
-        display: flex;
-        gap: 12px;
-        margin-bottom: 25px;
-        flex-wrap: wrap;
-    }
-
-    .category-chip {
-        padding: 8px 20px;
-        border: 1px solid #e0e0e0;
-        border-radius: 30px;
-        font-size: 13px;
-        cursor: pointer;
-        background: white;
-        transition: all 0.2s;
-    }
-
-    .category-chip:hover {
-        border-color: #0066cc;
-        color: #0066cc;
-    }
-
-    .category-chip.active {
-        background: #1a1a2e;
-        color: white;
-        border-color: #1a1a2e;
-    }
-
-    /* Filter Tabs */
-    .filter-tabs {
-        display: flex;
-        gap: 20px;
-        margin-bottom: 25px;
-    }
-
-    .filter-tabs a {
-        text-decoration: none;
-        color: #888;
-        font-size: 14px;
-        padding-bottom: 8px;
-        cursor: pointer;
-    }
-
-    .filter-tabs a.active {
-        color: #333;
-        font-weight: 600;
-        border-bottom: 2px solid #333;
     }
 
     /* Grid Buku untuk Rekomendasi */
@@ -358,6 +369,7 @@
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
+        color: #333;
     }
 
     .book-author-grid {
@@ -390,7 +402,7 @@
         font-size: 40px;
     }
 
-    /* Button Favorite - DIPERBAIKI */
+    /* Button Favorite */
     .favorite-btn-wrapper {
         position: absolute;
         top: 8px;
@@ -525,18 +537,9 @@
         </div>
     </div>
 
-    <!-- Selamat Pagi/Siang/Sore/Malam - dinamis sesuai waktu -->
-    <div class="greeting-section">
-        <div class="greeting-card">
-            <h2 class="greeting-time" id="greetingTime"></h2>
-            <p class="greeting-message" id="greetingMessage"></p>
-        </div>
-    </div>
-
-    <!-- Rekomendasi Untuk Anda Section -->
-    <div class="recommendation-section">
-
-        <!-- Search Box - agak kotak -->
+    <!-- SEARCH & FILTER SECTION (Greeting dihapus) -->
+    <div class="search-filter-section">
+        <!-- Search Box dengan ikon -->
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="Cari judul buku, penulis, atau penerbit..." value="{{ request('search') }}">
         </div>
@@ -555,6 +558,13 @@
             <a href="#" class="tab {{ request('type') == 'available' ? 'active' : '' }}" data-type="available">Tersedia</a>
             <a href="#" class="tab {{ request('type') == 'latest' ? 'active' : '' }}" data-type="latest">Terbaru</a>
         </div>
+    </div>
+
+    <!-- Rekomendasi Untuk Anda Section -->
+    <div class="recommendation-section">
+        <div class="section-header">
+            <h3>Rekomendasi Untuk Anda</h3>
+        </div>
 
         <!-- Book Grid -->
         <div class="book-grid" id="bookGrid">
@@ -568,38 +578,6 @@
 </div>
 
 <script>
-    // ========== GREETING DINAMIS ==========
-    function setGreeting() {
-        const now = new Date();
-        const hours = now.getHours();
-        const greetingTimeElem = document.getElementById('greetingTime');
-        const greetingMessageElem = document.getElementById('greetingMessage');
-        const userName = '{{ auth()->user()->name ?? '
-        Pengunjung ' }}';
-
-        let greeting = '';
-        let timeOfDay = '';
-
-        if (hours >= 3 && hours < 11) {
-            timeOfDay = 'Selamat Pagi';
-            greeting = 'Yuk, cari buku baru untuk dipinjam!';
-        } else if (hours >= 11 && hours < 15) {
-            timeOfDay = 'Selamat Siang';
-            greeting = 'Waktu yang tepat untuk meminjam buku favoritmu!';
-        } else if (hours >= 15 && hours < 18) {
-            timeOfDay = 'Selamat Sore';
-            greeting = 'Santai sejenak, pilih buku yang ingin kamu pinjam!';
-        } else {
-            timeOfDay = 'Selamat Malam';
-            greeting = 'Temukan buku inspiratif untuk menemani malammu!';
-        }
-
-        greetingTimeElem.textContent = `${timeOfDay}, ${userName}!`;
-        greetingMessageElem.textContent = greeting;
-    }
-
-    setGreeting();
-
     // ========== QUOTE CAROUSEL ==========
     let currentSlide = 0;
     const slides = document.querySelectorAll('.quote-slide');
@@ -769,7 +747,7 @@
         return div.innerHTML;
     }
 
-    // Search dengan debounce (tanpa reload)
+    // Search dengan debounce
     let searchInput = document.getElementById('searchInput');
     let searchTimeout;
     if (searchInput) {

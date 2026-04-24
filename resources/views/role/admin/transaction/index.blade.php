@@ -35,14 +35,6 @@
         <div class="card border-0 rounded-4" style="box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
             <div class="card-body p-4">
 
-                {{-- HEADER TABLE --}}
-                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                    <h6 class="fw-semibold mb-0">Transaction List</h6>
-                    <span class="badge rounded-pill px-3 py-2" style="background:#eef2ff; color:#4338ca;">
-                        {{ count($transactions) }} Transactions
-                    </span>
-                </div>
-
                 {{-- TABLE --}}
                 <div class="table-responsive">
                     <table class="table align-middle mb-0 datatable">

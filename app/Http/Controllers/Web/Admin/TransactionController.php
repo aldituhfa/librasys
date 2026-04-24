@@ -8,6 +8,7 @@ use App\Models\Book;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\TransactionExport;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
@@ -65,16 +66,25 @@ class TransactionController extends Controller
         return view('role.admin.report.index', compact('transactions'));
     }
 
-    public function exportExcel()
+    public function exportExcel(Request $request)
     {
-        return Excel::download(new TransactionExport, 'report_peminjaman.xlsx');
+        $status = $request->status;
+
+        return Excel::download(
+            new TransactionExport($status),
+            'report_peminjaman.xlsx'
+        );
     }
 
-    public function exportPDF()
+    public function exportPDF(Request $request)
     {
-        $transactions = Transaction::with('user', 'book')
-            ->whereIn('status', ['returned', 'done', 'rejected'])
-            ->get();
+        $query = Transaction::with('user', 'book');
+
+        if ($request->status && $request->status !== 'all') {
+            $query->where('status', $request->status);
+        }
+
+        $transactions = $query->get();
 
         $pdf = Pdf::loadView('role.admin.report.pdf', compact('transactions'));
 
