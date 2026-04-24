@@ -123,12 +123,12 @@
 </div>
 
 {{-- ============================================ --}}
-{{-- MODAL TAMBAH BUKU (BIRU TERANG) --}}
+{{-- MODAL TAMBAH BUKU (SLATE/ABU-ABU seperti modal edit) --}}
 {{-- ============================================ --}}
 <div class="modal fade" id="modalTambahBuku" tabindex="-1" x-data="{ coverPreview: null }" @hidden.bs.modal="coverPreview = null">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg rounded-4">
-            <div class="modal-header" style="background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%); color: white; border-radius: 20px 20px 0 0;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #475569 0%, #334155 100%); color: white; border-radius: 20px 20px 0 0;">
                 <div class="d-flex align-items-center gap-2">
                     <i class="ti ti-plus-circle fs-4"></i>
                     <h5 class="modal-title fw-semibold mb-0">Add New Book</h5>
@@ -188,10 +188,22 @@
                             @error('category_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-4">
+                            <label class="form-label fw-semibold">Genre <span class="text-danger">*</span></label>
+                            <select name="genres[]" class="form-select" multiple required>
+                                @foreach($genres as $genre)
+                                <option value="{{ $genre->id }}">{{ $genre->name }}</option>
+                                @endforeach
+                            </select>
+                            <small class="text-muted">Bisa pilih lebih dari 1 (Ctrl + Click)</small>
+                        </div>
+                        <div class="col-md-4">
                             <label class="form-label fw-semibold">Stock <span class="text-danger">*</span></label>
                             <input type="number" name="stock" class="form-control @error('stock') is-invalid @enderror" placeholder="Jumlah stok" value="{{ old('stock') }}" min="0" required>
                             @error('stock')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
                         <div class="col-md-4">
                             <label class="form-label fw-semibold">Price <span class="text-danger">*</span></label>
                             <div class="input-group">
@@ -200,14 +212,11 @@
                             </div>
                             @error('price')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
-                    </div>
-
-                    <div class="row g-3 mb-3">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label class="form-label fw-semibold">Number Of Pages</label>
                             <input type="number" name="pages" class="form-control" placeholder="Jumlah halaman" value="{{ old('pages') }}" min="1">
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-4">
                             <label class="form-label fw-semibold">Book Cover</label>
                             <input type="file" name="cover" class="form-control" accept="image/*" @change="
                                 const file = $event.target.files[0];
@@ -219,9 +228,14 @@
                                     coverPreview = null;
                                 }
                             ">
-                            <div x-show="coverPreview" class="mt-2" x-transition>
-                                <img :src="coverPreview" class="rounded-2 border shadow-sm" style="max-height: 100px;" alt="Preview">
-                                <p class="text-muted small mt-1 mb-0">Preview cover</p>
+                        </div>
+                    </div>
+
+                    <div x-show="coverPreview" class="mb-3" x-transition>
+                        <div class="bg-light rounded-3 p-3">
+                            <label class="form-label fw-semibold small mb-2">Cover Preview</label>
+                            <div>
+                                <img :src="coverPreview" class="rounded-2 border shadow-sm" style="max-height: 120px;" alt="Preview">
                             </div>
                         </div>
                     </div>
@@ -236,7 +250,7 @@
                     <button type="button" class="btn btn-outline-secondary rounded-2 px-4" data-bs-dismiss="modal">
                         <i class="ti ti-x me-1"></i> Cancel
                     </button>
-                    <button type="submit" class="btn btn-primary rounded-2 px-4">
+                    <button type="submit" class="btn rounded-2 px-4" style="background: #475569; color: white; border: none;">
                         <i class="ti ti-device-floppy me-1"></i> Save Book
                     </button>
                 </div>
@@ -250,7 +264,7 @@
 {{-- ============================================ --}}
 @foreach($books as $book)
 <div class="modal fade" id="editBook{{ $book->id }}" tabindex="-1">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg rounded-4">
             <div class="modal-header" style="background: linear-gradient(135deg, #475569 0%, #334155 100%); color: white; border-radius: 20px 20px 0 0;">
                 <div class="d-flex align-items-center gap-2">
@@ -301,9 +315,24 @@
                             </select>
                         </div>
                         <div class="col-md-4">
+                            <label class="form-label fw-semibold">Genre</label>
+                            <select name="genres[]" class="form-select" multiple>
+                                @foreach($genres as $genre)
+                                <option value="{{ $genre->id }}"
+                                    {{ $book->genres->contains($genre->id) ? 'selected' : '' }}>
+                                    {{ $genre->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                            <small class="text-muted">Bisa pilih lebih dari 1 (Ctrl + Click)</small>
+                        </div>
+                        <div class="col-md-4">
                             <label class="form-label fw-semibold">Stock <span class="text-danger">*</span></label>
                             <input type="number" name="stock" class="form-control" value="{{ $book->stock }}" min="0" required>
                         </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
                         <div class="col-md-4">
                             <label class="form-label fw-semibold">Price <span class="text-danger">*</span></label>
                             <div class="input-group">
@@ -311,24 +340,27 @@
                                 <input type="number" name="price" class="form-control" value="{{ $book->price }}" min="0" required>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row g-3 mb-3">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label class="form-label fw-semibold">Number of Pages</label>
                             <input type="number" name="pages" class="form-control" value="{{ $book->pages }}">
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-4">
                             <label class="form-label fw-semibold">Book Cover</label>
                             <input type="file" name="cover" class="form-control" accept="image/*">
-                            @if($book->cover)
-                            <div class="mt-2">
-                                <img src="{{ asset('storage/'.$book->cover) }}" class="rounded-2 border shadow-sm" style="max-height: 80px;" alt="Current Cover">
-                                <p class="text-muted small mt-1 mb-0">Current cover (leave empty if you don't want to change it)</p>
-                            </div>
-                            @endif
                         </div>
                     </div>
+
+                    @if($book->cover)
+                    <div class="mb-3">
+                        <div class="bg-light rounded-3 p-3">
+                            <label class="form-label fw-semibold small mb-2">Current Cover</label>
+                            <div>
+                                <img src="{{ asset('storage/'.$book->cover) }}" class="rounded-2 border shadow-sm" style="max-height: 100px;" alt="Current Cover">
+                                <p class="text-muted small mt-2 mb-0">Leave empty if you don't want to change the cover</p>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
 
                     <div class="mb-2">
                         <label class="form-label fw-semibold">Description / Synopsis</label>
@@ -413,6 +445,38 @@
     .rounded-4 {
         border-radius: 20px !important;
     }
+
+    /* Modal styling yang lebih rapi */
+    .modal-header {
+        padding: 1rem 1.5rem;
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+    }
+
+    .modal-footer {
+        padding: 1rem 1.5rem;
+    }
+
+    .form-control,
+    .form-select {
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #475569;
+        box-shadow: 0 0 0 2px rgba(71, 85, 105, 0.1);
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: #f1f5f9;
+        border-color: #cbd5e1;
+    }
 </style>
 
 @push('scripts')
@@ -440,13 +504,23 @@
                     previous: "←"
                 }
             },
-            columnDefs: [
-                { className: "text-center", targets: [0, 4, 6] },
-                { orderable: false, targets: [1, 6] }
+            columnDefs: [{
+                    className: "text-center",
+                    targets: [0, 4, 6]
+                },
+                {
+                    orderable: false,
+                    targets: [1, 6]
+                }
             ],
-            order: [[0, 'asc']],
+            order: [
+                [0, 'asc']
+            ],
             pageLength: 10,
-            lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Semua"]]
+            lengthMenu: [
+                [5, 10, 25, 50, -1],
+                [5, 10, 25, 50, "Semua"]
+            ]
         });
     });
 </script>

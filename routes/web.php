@@ -11,6 +11,7 @@ use App\Http\Controllers\Web\User\BookController as UserBookController;
 use App\Http\Controllers\Web\User\TransactionController as UserTransaction;
 use App\Http\Controllers\Web\Admin\TransactionController as AdminTransaction;
 use App\Http\Controllers\Web\User\FavoriteController;
+use App\Http\Controllers\Web\Admin\GenreController;
 
 
 
@@ -41,6 +42,16 @@ Route::middleware(['auth'])->group(function () {
             ->name('admin.categories.update');
         Route::delete('/admin/categories/{id}', [CategoryController::class, 'destroy'])
             ->name('admin.categories.destroy');
+
+        // crud genre
+        Route::get('/admin/genres', [GenreController::class, 'index'])
+            ->name('admin.genres');
+        Route::post('/admin/genres', [GenreController::class, 'store'])
+            ->name('admin.genres.store');
+        Route::put('/admin/genres/{id}', [GenreController::class, 'update'])
+            ->name('admin.genres.update');
+        Route::delete('/admin/genres/{id}', [GenreController::class, 'destroy'])
+            ->name('admin.genres.destroy');
 
         // crud buku
         Route::get('/admin/books', [BookController::class, 'index'])->name('admin.books');

@@ -132,7 +132,7 @@
 
     .info-cards {
         display: grid;
-        grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         gap: 16px;
         margin-top: 32px;
     }
@@ -239,6 +239,16 @@
             </div>
 
             <div class="book-meta">
+                <strong>Category</strong>
+                <span>{{ $book->category->name ?? '-' }}</span>
+            </div>
+
+            <div class="book-meta">
+                <strong>Genre</strong>
+                <span>{{ $book->genres->pluck('name')->implode(', ') ?? '-' }}</span>
+            </div>
+
+            <div class="book-meta">
                 <strong>ISBN</strong>
                 <span>{{ $book->isbn ?? '-' }}</span>
             </div>
@@ -271,10 +281,6 @@
         <div class="info-card">
             <div class="label">Number of Pages</div>
             <div class="value">{{ $book->pages ?? '-' }}</div>
-        </div>
-        <div class="info-card">
-            <div class="label">Category</div>
-            <div class="value">{{ $book->category->name ?? '-' }}</div>
         </div>
         <div class="info-card">
             <div class="label">Available Stock</div>

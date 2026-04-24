@@ -12,10 +12,11 @@ class BookController extends Controller
 
     public function index()
     {
-        $books = Book::with('category')->latest()->get();
+        $books = Book::with(['category', 'genres'])->latest()->get();
         $categories = Category::all();
+        $genres = \App\Models\Genre::all();
 
-        return view('role.admin.book.index', compact('books', 'categories'));
+        return view('role.admin.book.index', compact('books', 'categories', 'genres'));
     }
 
 
@@ -26,6 +27,7 @@ class BookController extends Controller
             'author' => 'required',
             'stock' => 'required|integer|min:0',
             'category_id' => 'required',
+            'genres' => 'required|array',
             'price' => 'required|integer|min:0',
             'isbn' => 'nullable|unique:books,isbn',
             'cover' => 'image|mimes:jpg,png,jpeg|max:2048'
@@ -40,7 +42,8 @@ class BookController extends Controller
             $data['cover'] = $cover;
         }
 
-        Book::create($data);
+        $book = Book::create($data);
+        $book->genres()->sync($request->genres);
 
         return redirect()->back()->with('success', 'Buku berhasil ditambahkan');
     }
@@ -72,8 +75,9 @@ class BookController extends Controller
             'author' => 'required',
             'stock' => 'required|integer|min:0',
             'category_id' => 'required',
+            'genres' => 'required|array',
             'price' => 'required|integer|min:0',
-            'isbn' => 'nullable|unique:books,isbn,' . $id, // ✅ PENTING
+            'isbn' => 'nullable|unique:books,isbn,' . $id,
             'cover' => 'image|mimes:jpg,png,jpeg|max:2048'
         ]);
 
@@ -82,11 +86,12 @@ class BookController extends Controller
         $data['isbn'] = $request->isbn ?: null;
 
         if ($request->hasFile('cover')) {
-            $cover = $request->file('cover')->store('books', 'public');
+            $cover = $request->file('cover')->store('books', 'public',);
             $data['cover'] = $cover;
         }
 
         $book->update($data);
+        $book->genres()->sync($request->genres);
 
         return redirect()->route('admin.books')->with('success', 'Buku berhasil diupdate');
     }

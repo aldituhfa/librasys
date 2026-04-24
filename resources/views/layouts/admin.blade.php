@@ -190,6 +190,14 @@
                     </a>
                 </li>
 
+                <li data-title="Genre">
+                    <a href="{{ route('admin.genres') }}"
+                        class="{{ request()->routeIs('admin.genres') ? 'active' : '' }}">
+                        <i class="ti ti-tags"></i>
+                        <span class="menu-text">Genre</span>
+                    </a>
+                </li>
+
                 <li data-title="Buku">
                     <a href="{{ route('admin.books') }}"
                         class="{{ request()->routeIs('admin.books') ? 'active' : '' }}">

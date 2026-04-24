@@ -503,7 +503,6 @@
         <div class="new-arrivals-side">
             <div class="new-arrivals-header">
                 <h3>New Arrivals</h3>
-                <a href="#">View All →</a>
             </div>
             <div class="new-books-horizontal">
                 @php
